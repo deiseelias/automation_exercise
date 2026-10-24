@@ -1,0 +1,51 @@
+name: Testes E2E - Automation Exercise
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    name: Cypress 13 - Trabalho final
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+
+    steps:
+      - name: Obter codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Executar os dez cenarios
+        uses: cypress-io/github-action@v6
+        with:
+          install-command: npm ci
+          command: npm test
+
+      - name: Publicar relatorio Mochawesome
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-mochawesome-${{ github.run_number }}
+          path: cypress/reports/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Publicar videos e capturas de falha
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidencias-cypress-${{ github.run_number }}
+          path: |
+            cypress/videos/
+            cypress/screenshots/
+          if-no-files-found: warn
+          retention-days: 30
