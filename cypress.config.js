@@ -6,7 +6,7 @@ module.exports = defineConfig({
   defaultCommandTimeout: 10000,
   requestTimeout: 15000,
   responseTimeout: 30000,
-  video: true,
+  video: false,
   screenshotOnRunFailure: true,
   retries: { runMode: 1, openMode: 0 },
   reporter: 'cypress-mochawesome-reporter',
